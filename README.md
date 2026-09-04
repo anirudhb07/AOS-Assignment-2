@@ -54,3 +54,22 @@ To remove the generated executable and object files:
 ```bash
 make clean
 ```
+
+
+## Module Overview
+
+src/main.cpp: Entry point handling the REPL loop, signal setup (SIGINT, SIGTSTP, SIGCHLD), and graceful shutdown.
+
+src/helpers.cpp: String manipulation, path mapping for ~, whitespace trimming, and dynamic memory tokenization.
+
+src/prompt.cpp: Renders the shell prompt format <username@system_name:relative_path>.
+
+src/builtins.cpp: Custom implementations for cd, pwd, echo, ls (-a, -l), and search.
+
+src/pinfo.cpp: Parses /proc/<pid> files (status, statm, exe) to display process details.
+
+src/history.cpp: Manages session history ring buffer and .shell_history persistence.
+
+src/execute.cpp: Manages command pipeline chains (|), I/O redirection (<, >, >>), built-in dispatching, and background process spawning (&).
+
+src/readline_custom.cpp: Custom POSIX terminal driver handling raw mode, TAB autocomplete, cursor navigation, and history navigation via arrow keys.
