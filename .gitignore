@@ -1,0 +1,23 @@
+# Executable binaries
+shell
+a.out
+*.out
+*.exe
+
+# Compiled object files
+*.o
+src/*.o
+
+# Temporary history & log files generated during testing
+.shell_history
+*.log
+*.tmp
+out.txt
+lines.txt
+
+# OS & Editor generated metadata
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*~
