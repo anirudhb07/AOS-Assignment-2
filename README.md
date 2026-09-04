@@ -58,18 +58,18 @@ make clean
 
 ## Module Overview
 
-src/main.cpp: Entry point handling the REPL loop, signal setup (SIGINT, SIGTSTP, SIGCHLD), and graceful shutdown.
+src/main.cpp: Starts the shell, displays the prompt, and handles standard keyboard signals (like CTRL-C and CTRL-Z).
 
-src/helpers.cpp: String manipulation, path mapping for ~, whitespace trimming, and dynamic memory tokenization.
+src/prompt.cpp: Formats and prints the interactive user prompt (<username@hostname:path>).
 
-src/prompt.cpp: Renders the shell prompt format <username@system_name:relative_path>.
+src/builtins.cpp: Handles internal shell commands (cd, pwd, echo, ls, and search).
 
-src/builtins.cpp: Custom implementations for cd, pwd, echo, ls (-a, -l), and search.
+src/execute.cpp: Handles piping (|), file redirection (<, >, >>), and running external system binaries.
 
-src/pinfo.cpp: Parses /proc/<pid> files (status, statm, exe) to display process details.
+src/pinfo.cpp: Reads process details (memory, status, executable path) from the /proc directory.
 
-src/history.cpp: Manages session history ring buffer and .shell_history persistence.
+src/history.cpp: Tracks past commands and saves them to ~/.shell_history.
 
-src/execute.cpp: Manages command pipeline chains (|), I/O redirection (<, >, >>), built-in dispatching, and background process spawning (&).
+src/readline_custom.cpp: Reads keypresses directly for TAB auto-completion, arrow key navigation, and line editing.
 
-src/readline_custom.cpp: Custom POSIX terminal driver handling raw mode, TAB autocomplete, cursor navigation, and history navigation via arrow keys.
+src/helpers.cpp: Utility functions for string parsing, trimming spaces, and path formatting.
