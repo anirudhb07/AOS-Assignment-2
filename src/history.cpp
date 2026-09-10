@@ -9,13 +9,13 @@ void init_history() {
     char hist_path[2048];
     sprintf(hist_path, "%s/.shell_history", HOME_DIR);
 
-    FILE *file = fopen(hist_path, "r");
+    FILE *file = fopen(hist_path, "r"); //opens .shell_history in read-only mode.
     if (file == NULL) {
         return;
     }
 
     char line[MAX_CMD_LEN];
-    while (fgets(line, sizeof(line), file) != NULL) {
+    while (fgets(line, sizeof(line), file) != NULL) { //Reads the file line-by-line.
         char *trimmed = trim_whitespace(line);
         if (strlen(trimmed) > 0) {
             // Shift array left if history buffer is full
@@ -39,7 +39,7 @@ void save_history() {
     char hist_path[2048];
     sprintf(hist_path, "%s/.shell_history", HOME_DIR);
 
-    FILE *file = fopen(hist_path, "w");
+    FILE *file = fopen(hist_path, "w"); //Opens .shell_history in write mode (truncating/clearing the file)
     if (file == NULL) {
         return;
     }
@@ -48,7 +48,7 @@ void save_history() {
         fprintf(file, "%s\n", history_list[i]);
     }
 
-    fclose(file);
+    fclose(file); //Saves and closes the file stream
 }
 
 // Add new command to history buffer and sync with file

@@ -30,32 +30,33 @@ void get_relative_path(const char *cwd, const char *home, char *out) {
     int home_len = strlen(home);
 
     // If cwd starts with home path
+    // and is either exact match (\0) or a subfolder boundary (/).
     if (strncmp(cwd, home, home_len) == 0 && (cwd[home_len] == '/' || cwd[home_len] == '\0')) {
         out[0] = '~';
         out[1] = '\0';
-        strcat(out, cwd + home_len);
+        strcat(out, cwd + home_len); //Appends path remainder after home directory prefix
     } else {
-        strcpy(out, cwd);
+        strcpy(out, cwd); //If path lies outside home, copies full absolute path into out.
     }
 }
 
 // Split string by delimiter into array of tokens
 char** split_string(const char *str, const char *delim, int *count) {
-    int capacity = 10;
+    int capacity = 10; //initial capacity for token array
     int num_tokens = 0;
-    char **tokens = (char**)malloc(capacity * sizeof(char*));
+    char **tokens = (char**)malloc(capacity * sizeof(char*)); //memory block for 10 char* elements
 
-    char *copy = strdup(str);
-    char *token = strtok(copy, delim);
+    char *copy = strdup(str); //Creates a duplicate string buffer
+    char *token = strtok(copy, delim); //Extracts the first token bounded by delim
 
     while (token != NULL) {
         if (num_tokens + 1 >= capacity) {
-            capacity *= 2;
+            capacity *= 2; //dynamic resizing if capacity limit is reached
             tokens = (char**)realloc(tokens, capacity * sizeof(char*));
         }
-        tokens[num_tokens] = strdup(token);
+        tokens[num_tokens] = strdup(token); //Allocates new heap copy for current token and saves it in array.
         num_tokens++;
-        token = strtok(NULL, delim);
+        token = strtok(NULL, delim); //Requests next token from strtok.
     }
 
     tokens[num_tokens] = NULL; // Null terminate for execvp
@@ -72,7 +73,8 @@ char** split_string(const char *str, const char *delim, int *count) {
 void free_token_array(char **tokens) {
     if (tokens == NULL) return;
 
-    for (int i = 0; tokens[i] != NULL; i++) {
+    //freeing each individually heap-allocated token string
+    for (int i = 0; tokens[i] != NULL; i++) { 
         free(tokens[i]);
     }
     free(tokens);

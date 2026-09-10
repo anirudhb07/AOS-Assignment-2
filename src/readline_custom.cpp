@@ -13,13 +13,17 @@ void init_terminal_driver() {
     atexit(reset_terminal_driver);
 
     struct termios raw = default_termios;
-    raw.c_lflag &= ~(ECHO | ICANON);
+    raw.c_lflag &= ~(ECHO | ICANON); //disables ICANON and ECHO flags for raw input
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
 }
 
 // Handle TAB auto-completion for files and directory contents
+// buf is the line being typed so far
+// *len is how many characters are in it
+// *pos is where the cursor currently sits
 void autocomplete_word(char *buf, int *len, int *pos) {
-    buf[*len] = '\0';
+    // null-terminates the buffer so C string functions can be used on it safely
+    buf[*len] = '\0'; //
 
     // Find starting index of current target word
     int word_start = *pos - 1;
@@ -28,19 +32,19 @@ void autocomplete_word(char *buf, int *len, int *pos) {
     }
     word_start++;
 
-    char *prefix = buf + word_start;
+    char *prefix = buf + word_start; //the current word being typed, starting from the first character of the word
     size_t prefix_len = *pos - word_start;
 
     char *matches[256];
     int match_count = 0;
 
-    DIR *dir = opendir(".");
+    DIR *dir = opendir("."); //open current working directory 
     if (dir != NULL) {
         struct dirent *entry;
         while ((entry = readdir(dir)) != NULL) {
-            if (strncmp(entry->d_name, prefix, prefix_len) == 0) {
+            if (strncmp(entry->d_name, prefix, prefix_len) == 0) { //check every entry name against prefix only upto prefix len
                 if (strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
-                    matches[match_count] = strdup(entry->d_name);
+                    matches[match_count] = strdup(entry->d_name); //if match, duplicate the entry name and store in matches array
                     match_count++;
                 }
             }
